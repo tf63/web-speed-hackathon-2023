@@ -1,4 +1,4 @@
-import { type FC, lazy } from 'react';
+import { type FC, lazy, Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 
@@ -68,18 +68,20 @@ export const Order: FC = () => {
 
         <div className={styles.addressForm()}>
           <h2 className={styles.addressFormHeading()}>お届け先</h2>
-          <OrderForm
-            onSubmit={(values) => {
-              submitOrder({
-                variables: {
-                  address: `${values.prefecture}${values.city}${values.streetAddress}`,
-                  zipCode: values.zipCode,
-                },
-              }).then(() => {
-                navigate('/order/complete');
-              });
-            }}
-          />
+          <Suspense>
+            <OrderForm
+              onSubmit={(values) => {
+                submitOrder({
+                  variables: {
+                    address: `${values.prefecture}${values.city}${values.streetAddress}`,
+                    zipCode: values.zipCode,
+                  },
+                }).then(() => {
+                  navigate('/order/complete');
+                });
+              }}
+            />
+          </Suspense>
         </div>
       </div>
     );
